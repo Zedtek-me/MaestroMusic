@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # project apps
     'apps.musicapp',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
