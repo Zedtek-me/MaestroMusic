@@ -1,0 +1,25 @@
+services:
+  maestromusic:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: maestromusic_backend
+    container_name: maestromusic_backend
+    ports:
+      - "7000:7000"
+      - "9000:9000"
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - maestromusic_db
+
+  # database
+  maestromusic_db:
+    image: postgres
+    container_name: maestromusic_db
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    env_file:
+      - .env
