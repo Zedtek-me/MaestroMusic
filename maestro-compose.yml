@@ -5,6 +5,9 @@ services:
       dockerfile: Dockerfile
     image: maestromusic_backend
     container_name: maestromusic_backend
+    volumes:
+      .:/musicapp
+      ./.env:/musicapp/.env
     ports:
       - "7000:7000"
       - "9000:9000"
@@ -23,3 +26,10 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    volumes:
+      - .:/musicapp
+      - ./.env:/musicapp/.env
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:

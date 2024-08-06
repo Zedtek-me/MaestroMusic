@@ -1,9 +1,10 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from .managers import UserManager
+from interfaces.base_models import BaseModel
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, BaseModel):
     '''user model'''
     USER_STATUSES = (
         ("ACTIVE", "ACTIVE"),
