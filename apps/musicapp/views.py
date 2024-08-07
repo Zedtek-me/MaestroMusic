@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest
-from django.views import View
+from rest_framework.viewsets import ViewSet
 
 
-class HomeView(View):
-    '''loads the homepage and renders it'''
-
-    def get(self, request):
-        '''first template render'''
+def render_homepage(request):
+    '''renders the homepage'''
+    pass
+    # return render(request, "index.html")
         

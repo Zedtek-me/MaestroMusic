@@ -6,8 +6,8 @@ services:
     image: maestromusic_backend
     container_name: maestromusic_backend
     volumes:
-      .:/musicapp
-      ./.env:/musicapp/.env
+      - .:/musicapp
+      - ./.env:/musicapp/.env
     ports:
       - "7000:7000"
       - "9000:9000"
