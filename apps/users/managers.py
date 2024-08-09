@@ -9,8 +9,9 @@ class UserManager(BaseUserManager, BaseManager):
         '''creates a user'''
         if 'email' not in info:
             raise ValidationError(message="email must be provided!")
-        user = self.model(email=info.get("email"), **info)
+        user = self.model(email=info.pop("email"), **info)
         user.set_password(info.get("password"))
+        # user.is_active = True
         user.save()
         return user
 

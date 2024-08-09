@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db import transaction
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication
@@ -20,24 +21,30 @@ class AuthFlow(ViewSet):
         password = request.data.get("password")
         user = AuthUtils.authenticate(email, password)
         if user is None:
-            return ResponseManager(_type="error", message="invalid email or password!")
+            return ResponseManager(_type="error", message="invalid email or password!").response
         serializer = UserSerializer(user)
         _data = {
             "data":serializer.data,
             "tokens":AuthUtils.generate_tokens(user)
         }
-        return ResponseManager(_type="success", message="user successfully authenticated!", data=_data, status_code=status.HTTP_200_OK)
-
+        return ResponseManager(_type="success", message="user successfully authenticated!", data=_data, status_code=status.HTTP_200_OK).response
+    
+    @transaction.atomic
     @action(methods=["POST"], detail=False, url_path="register")
     def register(self, request):
         '''registers a user'''
         _data = request.data
-        serializer = UserSerializer(data=_data)
-        if not serializer.is_valid():
-            return ResponseManager(_type="error", message=serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-        return ResponseManager(_type="success", message="user successfully registered!", data=serializer.data, status_code=status.HTTP_201_CREATED)
-
+        user = User.objects.create_user(**_data)
+        user.set_password(_data.get("password", ""))
+        user.save()
+        serializer = UserSerializer(user)
+        _data = {
+            "data":serializer.data,
+            "tokens":AuthUtils.generate_tokens(user)
+        }
+        return ResponseManager(_type="success", message="user successfully registered!", data=_data, status_code=status.HTTP_201_CREATED).response
+    
+    @transaction.atomic
     @action(methods=["POST"], detail=False, url_path="logout")
     def logout(self, request):
         '''logs a user out'''
@@ -47,6 +54,6 @@ class AuthFlow(ViewSet):
                 _type="error",
                 message="refresh token must be provided!",
                 status_code=status.HTTP_400_BAD_REQUEST
-            )
+            ).response
         AuthUtils.blacklist_token(refresh_token)
-        return ResponseManager(_type="success", message="user successfully logged out!", status_code=status.HTTP_200_OK)
+        return ResponseManager(_type="success", message="user successfully logged out!", status_code=status.HTTP_200_OK).response

@@ -7,8 +7,9 @@ class AuthUtils:
     '''all things related to authentication'''
 
     @staticmethod
-    def authenticate(email, password)->Type(Model):
+    def authenticate(email, password)->Type[Model]:
         '''authenticates a user'''
+        print(f"email... {email}\n password... {password}")
         user = User.objects.filter(email=email).first()
         if user is None:
             return None
@@ -20,7 +21,7 @@ class AuthUtils:
     @staticmethod
     def generate_tokens(user)->dict:
         '''generates tokens for a user'''
-        refresh_token = RefreshToken.for_user(user)
+        refresh_token = RefreshToken.for_user(user=user)
         return {
             "refresh": str(refresh_token),
             "access": str(refresh_token.access_token),
