@@ -6,7 +6,7 @@ class ResponseManager:
 
     def __init__(self, _type="error", message=None, data=None, status_code=400, **kwargs):
         '''initializes the response manager and return a response immediately'''
-        self.handle_response(
+        self._response = self.handle_response(
             _type=_type,
             message=message,
             data=data,
@@ -23,3 +23,8 @@ class ResponseManager:
             },
             status=status_code
         )
+
+    @property
+    def response(self):
+        '''returns the response'''
+        return self._response

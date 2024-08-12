@@ -1,3 +1,4 @@
 maestroVenv
 *pycache*
 *.env
+*.sqlite3
