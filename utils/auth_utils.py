@@ -9,7 +9,6 @@ class AuthUtils:
     @staticmethod
     def authenticate(email, password)->Type[Model]:
         '''authenticates a user'''
-        print(f"email... {email}\n password... {password}")
         user = User.objects.filter(email=email).first()
         if user is None:
             return None

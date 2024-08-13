@@ -1,8 +1,8 @@
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import AuthFlow
+from .views import AuthFlow, UserFlow
 
 router = DefaultRouter()
-router.register("", AuthFlow, basename="")
+router.register("auth", AuthFlow, basename="")
+router.register("user", UserFlow, basename="users")
 
 urlpatterns = router.urls
